@@ -1,0 +1,3 @@
+/var/tmp/mano.txt
+/var/tmp/mano1.txt
+/var/tmp/mano2.txt
