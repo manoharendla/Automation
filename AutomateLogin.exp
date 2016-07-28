@@ -1,0 +1,24 @@
+#!/usr/bin/expect -f
+exp_internal 1
+set force_conservative 1
+set timeout 20
+spawn $env(SHELL)
+match_max 100000
+send -- "ssh -i /root/.ssh/vm_private_key cloud-user@esmon\r"
+send -- "su -\r"
+expect "Password: "
+send -- "passw0rd\r"
+send -- "sed -i '/PermitRootLogin/c\PermitRootLogin yes' /etc/ssh/sshd_config\r"
+send -- "service sshd restart\r"
+send -- "exit\r"
+expect  "*logout* "
+send -- "exit\r"
+expect -- "*logout* "
+send -- "ssh-copy-id -i ~/.ssh/id_rsa.pub esmon\r"
+expect  {
+ "*Password* "   {send -- "passw0rd\r"}
+   "*cloud-ms-1* "
+}
+send -- "ssh esmon\r"
+expect "*esmon* "
+exit 0
