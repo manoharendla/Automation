@@ -4,10 +4,10 @@ spawn rm -rf /var/tmp/*
 spawn df -kh /var/tmp
 if { $::env(TRIAL_RUN) == true } {
         puts "Trial Run is true"
-		spawn scp  -oStrictHostKeyChecking=no $::env(HUB_USER)@ath-linux.lmera.ericsson.se:/home/elephant/monitoring/install_monitoring_gz.exp /var/tmp/install_monitoring.exp
+		spawn scp  -oStrictHostKeyChecking=no $::env(HUB_USER:/home/elephant/monitoring/install_monitoring_gz.exp /var/tmp/install_monitoring.exp
 } else {
         puts "Trial run is false"
-        spawn scp -oStrictHostKeyChecking=no $::env(HUB_USER)@ath-linux.lmera.ericsson.se:/home/elephant/monitoring/install_monitoring_7z.exp /var/tmp/install_monitoring.exp
+        spawn scp -oStrictHostKeyChecking=no $::env(HUB_USER):/home/elephant/monitoring/install_monitoring_7z.exp /var/tmp/install_monitoring.exp
 }
 expect {
         "yes/no" {send "yes\r"}
@@ -16,7 +16,7 @@ expect {
 expect "100%"
 
 #scp package from hub to /var/tmp
-spawn scp  -oStrictHostKeyChecking=no $::env(HUB_USER)@ath-linux.lmera.ericsson.se:/proj/ossm/ERICmonxxx.pkg.tar /var/tmp/
+spawn scp  -oStrictHostKeyChecking=no $::env(HUB_USER)@ /var/tmp/
 
 expect {
         "yes/no" {send "yes\r";exp_continue}
@@ -28,7 +28,7 @@ expect {
 }
 
 
-spawn scp -oStrictHostKeyChecking=no /var/tmp/ERICmonxxx.pkg.tar root@$::env(SERVER_HOSTNAME):/var/tmp/
+spawn scp -oStrictHostKeyChecking=no file root@$::env(SERVER_HOSTNAME):/var/tmp/
 expect {
                 "yes/no" {send "yes\r"exp_continue}
                 "assword" {send "$::env(VAPP_PASS)\r";exp_continue}
@@ -37,7 +37,7 @@ expect {
                  "ERROR: no package associated with" {}
         }
 
-spawn scp  /var/tmp/install_monitoring.exp root@$::env(SERVER_HOSTNAME):/var/tmp/
+spawn scp  file  root@$::env(SERVER_HOSTNAME):/var/tmp/
 expect {
                 "yes/no" {send "yes\r"exp_continue}
                 "assword" {send "$::env(VAPP_PASS)\r";exp_continue}
@@ -49,7 +49,7 @@ expect {
 
 
 
-spawn ssh root@$::env(SERVER_HOSTNAME) "chmod 777 /var/tmp/install_monitoring.exp; /var/tmp/install_monitoring.exp"
+spawn ssh root@$::env(SERVER_HOSTNAME) "chmod 777 file ; /var/tmp/install_monitoring.exp"
 
 expect {
                 "yes/no" {send "yes\r"exp_continue}
