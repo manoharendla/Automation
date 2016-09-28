@@ -1,0 +1,5 @@
+Automate log collections in:
+What all logs to be collected.
+Create a directory by its hostname on shared NAS.
+Create a gunzip and copy them to Shared NAS
+Upload to a FTP server with date and Name of the MS.
