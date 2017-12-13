@@ -4,7 +4,7 @@ set force_conservative 1
 set timeout 20
 spawn $env(SHELL)
 match_max 100000
-send -- "ssh -i /root/.ssh/vm_private_key cloud-user@mypc\r"
+send -- "ssh -i /root/.ssh/vm_private_key clouduser@mypc\r"
 send -- "su -\r"
 expect "Password: "
 send -- "passw0rd\r"
@@ -14,11 +14,11 @@ send -- "exit\r"
 expect  "*logout* "
 send -- "exit\r"
 expect -- "*logout* "
-send -- "ssh-copy-id -i ~/.ssh/id_rsa.pub esmon\r"
+send -- "ssh-copy-id -i ~/.ssh/id_rsa.pub vm\r"
 expect  {
  "*Password* "   {send -- "passw0rd\r"}
    "*cloud-ms-1* "
 }
-send -- "ssh esmon\r"
-expect "*esmon* "
+send -- "ssh vm\r"
+expect "*vm* "
 exit 0
