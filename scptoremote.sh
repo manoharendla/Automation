@@ -4,7 +4,7 @@ spawn rm -rf /var/tmp/*
 spawn df -kh /var/tmp
 if { $::env(TRIAL_RUN) == true } {
         puts "Trial Run is true"
-		spawn scp  -oStrictHostKeyChecking=no $::env(HUB_USER:/home/elephant/monitoring/install_monitoring_gz.exp /var/tmp/install_monitoring.exp
+		spawn scp  -oStrictHostKeyChecking=no $::env(HUB_USER:/installgz.exp /var/tmp/install.exp
 } else {
         puts "Trial run is false"
         spawn scp -oStrictHostKeyChecking=no $::env(HUB_USER):/home/elephant/monitoring/install_monitoring_7z.exp /var/tmp/install_monitoring.exp
