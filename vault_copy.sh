@@ -3,8 +3,10 @@ import json
 import getpass
 import hvac
 
-EXCLUDED_ENGINES = ['excluded-engine-1', 'excluded-engine-2']  # Add exclusions here
-VAULT_NAMESPACE = 'admin'  # Adjust to match your Vault namespace
+# ==== Configuration ====
+INCLUDED_ENGINES = []  # e.g., ['kv', 'secrets']
+EXCLUDED_ENGINES = ['excluded-engine-1']  # Engines to skip
+VAULT_NAMESPACE = 'admin'
 VALIDATION_FILE = 'vault_secrets_dump.json'
 
 
@@ -94,8 +96,13 @@ def copy_vault_kv2_data(source_url, destination_url, do_write=False):
 
     for mount_point in mounts:
         mount = mount_point.rstrip('/')
+
+        # Inclusion/Exclusion logic
+        if INCLUDED_ENGINES and mount not in INCLUDED_ENGINES:
+            print(f"Skipping {mount} (not in inclusion list)")
+            continue
         if mount in EXCLUDED_ENGINES:
-            print(f"Skipping excluded engine: {mount}")
+            print(f"Skipping {mount} (in exclusion list)")
             continue
 
         if is_kv2(src_client, mount):
@@ -117,10 +124,10 @@ def copy_vault_kv2_data(source_url, destination_url, do_write=False):
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Vault KVv2 Copier")
+    parser = argparse.ArgumentParser(description="Vault KVv2 Copier with Inclusion/Exclusion Support")
     parser.add_argument('--source-url', required=True, help='Source Vault URL')
     parser.add_argument('--destination-url', required=True, help='Destination Vault URL')
-    parser.add_argument('--write', action='store_true', help='Write to destination Vault')
+    parser.add_argument('--write', action='store_true', help='Actually write to destination Vault')
 
     args = parser.parse_args()
     copy_vault_kv2_data(args.source_url, args.destination_url, args.write)
